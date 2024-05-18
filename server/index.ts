@@ -1,20 +1,28 @@
-// server/index.js
-
-const express = require("express");
-var cors = require('cors')
+import express from 'express';
+import { PORT, DB_URL } from './config.ts';
+import mongoose from 'mongoose';
+import { questionRoute } from './routes/questionRoute.ts';
+import cors from 'cors';
 
 const app = express();
+app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 5000;
-
-
-//creates an endpoint for the route /api
-app.get("/api", (req, res) => {
-  res.json({ message: "Response from server" });
+app.get('/', (request, response) => {
+  console.log(request);
+  return response.status(234).send('Welcome To MERN Stack Tutorial');
 });
 
-// console.log that your server is up and running
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+app.use('/questions', questionRoute);
+
+mongoose
+  .connect(DB_URL)
+  .then(() => {
+    console.log('App connected to database');
+    app.listen(PORT, () => {
+      console.log(`App is listening to port: ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });

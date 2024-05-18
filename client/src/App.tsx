@@ -7,15 +7,15 @@ const App = () => {
   const [message, setMessage] = useState();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api').then((res) => {
-      setMessage(res.data.message);
+    axios.get('http://localhost:5555/questions').then((res) => {
+      setMessage(res.data);
     });
   }, [])
 
   return (
-    <>
-      {message}
-    </>
+    <div >
+      {message ? JSON.stringify(message) : null}
+    </div>
   )
 }
 
